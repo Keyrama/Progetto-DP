@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestione Account</title>
+    <link rel="stylesheet" href="/static/css/account.css" />
+</head>
+<body>
+    <div class="main-container">
+        <div class="welcome-text">Benvenuto da Crisbi's</div>
+        <div class="account-container">
+            <h1>Account Management</h1>
+
+            {{if .Error}}
+            <p class="error-message">{{.Error}}</p>
+            {{end}}
+
+            <form action="/account" method="POST">
+                <input type="text" name="first_name" placeholder="First Name" value="{{.FirstName}}" required>
+                <input type="text" name="last_name" placeholder="Last Name" value="{{.LastName}}" required>
+                <input type="email" name="email" placeholder="Email" value="{{.Email}}" required>
+            </form>
+
+            <div class="button-container">
+                <form action="/account" method="POST" style="display: inline;">
+                    <input type="hidden" name="first_name" value="{{.FirstName}}">
+                    <input type="hidden" name="last_name" value="{{.LastName}}">
+                    <input type="hidden" name="email" value="{{.Email}}">
+                    <button type="submit" class="btn-update">Update</button>
+                </form>
+                <form action="/delete" method="POST" style="display: inline;">
+                    <button type="submit" class="btn-delete">Delete Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

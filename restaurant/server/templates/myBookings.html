@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Le Mie Prenotazioni</title>
+    <link rel="stylesheet" href="/static/css/myBookings.css" />
+</head>
+<body>
+    <header>
+        <h1>Le Mie Prenotazioni - Crisbi's</h1>
+        <nav>
+            <a href="/home">Home</a>
+            <a href="/booking">Nuova Prenotazione</a>
+            <a href="/account">Account</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="bookings-container">
+            {{if .}}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Ora</th>
+                        <th>Ospiti</th>
+                        <th>Tavolo</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .}}
+                    <tr>
+                        <td>{{.ReservationDate}}</td>
+                        <td>{{.ReservationTime}}</td>
+                        <td>{{.Guests}}</td>
+                        <td>{{.TableNumber}}</td>
+                        <td>
+                            <span class="status status-{{.Status}}">
+                                {{if eq .Status "pending"}}In attesa
+                                {{else if eq .Status "confirmed"}}Confermata
+                                {{else if eq .Status "rejected"}}Rifiutata
+                                {{else}}{{.Status}}
+                                {{end}}
+                            </span>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            {{else}}
+            <div class="no-bookings">
+                <p>Non hai ancora prenotazioni.</p>
+                <a href="/booking" class="btn-primary">Prenota Ora</a>
+            </div>
+            {{end}}
+        </div>
+    </main>
+</body>
+</html>

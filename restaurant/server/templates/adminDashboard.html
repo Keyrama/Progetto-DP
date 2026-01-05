@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/adminDashboard.css" />
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard - Crisbi's</h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        {{if .Error}}
+        <div class="error-message">
+            <p>{{.Error}}</p>
+        </div>
+        {{end}}
+
+        {{if .Success}}
+        <div class="success-message">
+            <p>{{.Success}}</p>
+        </div>
+        {{end}}
+
+        <section class="stats">
+            <div class="stat-card">
+                <h3>Prenotazioni Oggi</h3>
+                <p class="stat-number">{{.Stats.TodayReservations}}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Prenotazioni Pending</h3>
+                <p class="stat-number">{{.Stats.PendingReservations}}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Tavoli Disponibili</h3>
+                <p class="stat-number">{{.Stats.AvailableTables}}</p>
+            </div>
+        </section>
+
+        <section class="reservations">
+            <h2>Prenotazioni Recenti</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Data</th>
+                        <th>Ora</th>
+                        <th>Ospiti</th>
+                        <th>Tavolo</th>
+                        <th>Stato</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{if .Reservations}}
+                    {{range .Reservations}}
+                    <tr>
+                        <td>{{.ID}}</td>
+                        <td>{{.Name}}</td>
+                        <td>{{.Email}}</td>
+                        <td>{{.ReservationDate}}</td>
+                        <td>{{.ReservationTime}}</td>
+                        <td>{{.Guests}}</td>
+                        <td>{{.TableNumber}}</td>
+                        <td><span class="status status-{{.Status}}">{{.Status}}</span></td>
+                        <td>
+                            {{if eq .Status "pending"}}
+                            <form action="/admin/confirm" method="POST" style="display: inline;">
+                                <input type="hidden" name="reservation_id" value="{{.ID}}">
+                                <button type="submit" class="btn-confirm">Conferma</button>
+                            </form>
+                            <form action="/admin/reject" method="POST" style="display: inline;">
+                                <input type="hidden" name="reservation_id" value="{{.ID}}">
+                                <button type="submit" class="btn-reject">Rifiuta</button>
+                            </form>
+                            {{else}}
+                            <span class="no-action">-</span>
+                            {{end}}
+                        </td>
+                    </tr>
+                    {{end}}
+                    {{else}}
+                    <tr>
+                        <td colspan="9" style="text-align: center;">Nessuna prenotazione</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

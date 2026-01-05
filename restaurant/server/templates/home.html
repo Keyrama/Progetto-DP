@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body>
+  <header>
+    <span class="menu-icon" onclick="toggleMenu()">☰</span>
+  </header>
+  <div class="menu" id="menu">
+    <a href="/booking">Prenota un Tavolo</a>
+    <a href="/account">Gestione Account</a>
+    <a href="/logout">Logout</a>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+  <h1>Benvenuto da Crisbi's</h1>
+
+  <script src="/static/js/home.js"></script>
+</body>
+</html>

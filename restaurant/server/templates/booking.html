@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prenota un Tavolo</title>
+    <link rel="stylesheet" href="/static/css/booking.css" />
+</head>
+<body>
+    <header>
+        <h1>Prenota un Tavolo - Crisbi's</h1>
+        <nav>
+            <a href="/home">Home</a>
+            <a href="/my-bookings">Le mie prenotazioni</a>
+            <a href="/account">Account</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="booking-container">
+            {{if .Success}}
+            <!-- Success Message -->
+            <h2>Prenotazione Completata!</h2>
+            <div class="success-message">
+                <p>{{.Success}}</p>
+                <a href="/my-bookings" class="btn-primary">Vedi le tue prenotazioni</a>
+            </div>
+            
+            {{else if .AvailableTimes}}
+            <!-- Step 2: Select Time -->
+            <h2>Seleziona l'orario</h2>
+            <p class="step-info">Data: <strong>{{.Date}}</strong> | Ospiti: <strong>{{.Guests}}</strong></p>
+            
+            {{if .Error}}
+            <div class="error-message">
+                <p>{{.Error}}</p>
+            </div>
+            {{end}}
+            
+            <form action="/booking/create" method="POST">
+                <input type="hidden" name="date" value="{{.Date}}">
+                <input type="hidden" name="guests" value="{{.Guests}}">
+                
+                <div class="form-group">
+                    <label for="time">Orari disponibili:</label>
+                    {{if .AvailableTimes}}
+                    <select id="time" name="time" required>
+                        <option value="">Seleziona un orario</option>
+                        {{if .LunchTimes}}
+                        <optgroup label="Pranzo">
+                            {{range .LunchTimes}}
+                            <option value="{{.}}">{{.}}</option>
+                            {{end}}
+                        </optgroup>
+                        {{end}}
+                        {{if .DinnerTimes}}
+                        <optgroup label="Cena">
+                            {{range .DinnerTimes}}
+                            <option value="{{.}}">{{.}}</option>
+                            {{end}}
+                        </optgroup>
+                        {{end}}
+                    </select>
+                    <small class="success-text">{{len .AvailableTimes}} orari disponibili</small>
+                    {{else}}
+                    <p class="no-times">Nessun orario disponibile per questa combinazione.</p>
+                    {{end}}
+                </div>
+                
+                <div class="button-group">
+                    <a href="/booking" class="btn-secondary">Cambia Data/Ospiti</a>
+                    {{if .AvailableTimes}}
+                    <button type="submit" class="btn-primary">Conferma Prenotazione</button>
+                    {{end}}
+                </div>
+            </form>
+            
+            {{else}}
+            <!-- Step 1: Select Date and Guests -->
+            <h2>Prenotazione Tavolo</h2>
+            
+            {{if .Error}}
+            <div class="error-message">
+                <p>{{.Error}}</p>
+            </div>
+            {{end}}
+            
+            <form action="/booking/step1" method="POST" id="booking-form">
+                <div class="form-group">
+                    <label for="date">Data:</label>
+                    <input type="date" id="date" name="date" value="{{.Date}}" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="guests">Numero di ospiti:</label>
+                    <input type="number" id="guests" name="guests" min="1" max="6" value="{{if .Guests}}{{.Guests}}{{else}}2{{end}}" required />
+                    <small>Da 1 a 6 persone</small>
+                </div>
+
+                <button type="submit" class="btn-primary">Continua</button>
+            </form>
+            {{end}}
+        </div>
+    </main>
+
+    <script src="/static/js/booking.js"></script>
+</body>
+</html>

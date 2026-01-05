@@ -1,0 +1,13 @@
+# Go
+/bin
+*.exe
+
+# Env
+.env
+
+# Database
+*.db
+
+# IDE
+.vscode/
+.idea/
